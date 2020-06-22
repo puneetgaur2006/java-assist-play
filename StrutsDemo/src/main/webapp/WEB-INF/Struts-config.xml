@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+   <!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+
+    <form-beans>
+    	<form-bean name="helloWorldForm" type="com.acc.form.HelloWorldForm"/>
+    	<form-bean name="employeeForm" type="com.acc.form.EmployeeForm"/>
+    </form-beans>
+
+	<global-forwards>
+        <forward name="helloWorld" path="/helloWorld.do"/>
+    </global-forwards>
+
+    <action-mappings>
+        <action path="/helloWorld" type="com.acc.action.HelloWorldAction" name="helloWorldForm">
+        	<forward name="success" path="/helloWorld.jsp" />
+        </action>
+       
+        
+        <action path="/addEmployee" forward="/addEmployee.jsp"/>
+          
+          
+         <action path="/addEmployee1" type="com.acc.action.AddEmployeeAction" name="employeeForm">
+        	<forward name="success" path="/index.jsp" />
+        </action>
+        
+        <action path="/updateEmployee" forward="/updateEmployee.jsp"/>
+        
+        <action path="/updateEmployee1" type="com.acc.action.UpdateEmployeeAction" name="employeeForm">
+        	<forward name="success" path="/saveUpdatedEmployee.jsp" />
+        </action>
+        
+        <action path="/saveUpdatedEmployee" type="com.acc.action.SaveUpdatedEmployeeAction" name="employeeForm">
+        <forward name="success" path="/index.jsp" />
+        </action>
+    </action-mappings>
+
+ 	
+</struts-config>
