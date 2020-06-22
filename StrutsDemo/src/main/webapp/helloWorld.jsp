@@ -25,7 +25,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Hello World</title>
+<title>Employee Management</title>
 </head>
 
 <body>
@@ -37,11 +37,11 @@
 	</div>
 	<div class="col-sm-6">
 		<a href="#addEmployeeModal" class="btn btn-success"
-			data-toggle="modal"><span>Add New Employee</span></a> 
+			data-toggle="modal"><span>Add New Employee</span></a>
 	</div>
 	<table id="example" class="table table-striped table-bordered"
 		style="width: 100%">
-		
+
 		<thead align="center">
 			<tr>
 				<th>ID</th>
@@ -52,25 +52,25 @@
 				<th>Delete?</th>
 			</tr>
 		</thead>
-		<tbody>	
-		<logic:iterate id="listId" name="list">
-			<tr>
-				<td><bean:write name="listId" property="id" /></td>
-				<td><bean:write name="listId" property="name" /></td>
-				<td><bean:write name="listId" property="salary" /></td>
-				<td><bean:write name="listId" property="dept" /></td>
-				<td><button type="button" class="btn btn-primary">Update</button></td>
-				<td><button type="button" class="btn btn-success">Delete</button></td>
-			</tr>
-		</logic:iterate>
+		<tbody>
+			<logic:iterate id="listId" name="list">
+				<tr>
+					<td><bean:write name="listId" property="id" /></td>
+					<td><bean:write name="listId" property="name" /></td>
+					<td><bean:write name="listId" property="salary" /></td>
+					<td><bean:write name="listId" property="dept" /></td>
+					<td><button type="button" class="btn btn-primary">Update</button></td>
+					<td><button type="button" class="btn btn-success">Delete</button></td>
+				</tr>
+			</logic:iterate>
 		</tbody>
 	</table>
 
-	<html:link action="/addEmployee">Add Employee</html:link>
+	<%-- <html:link action="/addEmployee">Add Employee</html:link>
 	<br></br>
-	<html:link action="/updateEmployee">Update Employee</html:link>
+	<html:link action="/updateEmployee">Update Employee</html:link> --%>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
 		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
 		crossorigin="anonymous"></script>
 	<script
