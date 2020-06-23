@@ -35,10 +35,11 @@
 			Manage <b>Employees</b>
 		</h2>
 	</div>
-	<div class="col-sm-6">
+	<div align="right">
 		<a href="#addEmployeeModal" class="btn btn-success"
 			data-toggle="modal"><span>Add New Employee</span></a>
 	</div>
+	<br>
 	<table id="example" class="table table-striped table-bordered"
 		style="width: 100%">
 
