@@ -9,15 +9,16 @@
     <form-beans>
     	<form-bean name="helloWorldForm" type="com.acc.form.HelloWorldForm"/>
     	<form-bean name="employeeForm" type="com.acc.form.EmployeeForm"/>
+    	<form-bean name="userLoginForm" type="com.acc.form.UserLoginForm"/>
     </form-beans>
 
 	<global-forwards>
-        <forward name="helloWorld" path="/helloWorld.do"/>
+        <forward name="dashboard" path="/dashboard.do"/>
     </global-forwards>
 
     <action-mappings>
-        <action path="/helloWorld" type="com.acc.action.HelloWorldAction" name="helloWorldForm">
-        	<forward name="success" path="/helloWorld.jsp" />
+        <action path="/dashboard" type="com.acc.action.DashBoardAction" name="helloWorldForm">
+        	<forward name="success" path="/dashboard.jsp" />
         </action>
        
         
@@ -37,6 +38,12 @@
         <action path="/saveUpdatedEmployee" type="com.acc.action.SaveUpdatedEmployeeAction" name="employeeForm">
         <forward name="success" path="/index.jsp" />
         </action>
+        
+          <action path="/userLogin" type="com.acc.action.UserLoginAction" name="userLoginForm">
+        <forward name="success" path="/index.jsp" />
+        <forward name="error" path="/login.jsp" />
+        </action>
+        
     </action-mappings>
 
  	

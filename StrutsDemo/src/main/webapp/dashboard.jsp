@@ -46,8 +46,10 @@
 			<tr>
 				<th>ID</th>
 				<th>Name</th>
-				<th>Salary</th>
 				<th>Dept</th>
+				<th>Address</th>
+				<th>Email</th>
+				<th>Phone No.</th>
 				<th>Update?</th>
 				<th>Delete?</th>
 			</tr>
@@ -57,8 +59,10 @@
 				<tr>
 					<td><bean:write name="listId" property="id" /></td>
 					<td><bean:write name="listId" property="name" /></td>
-					<td><bean:write name="listId" property="salary" /></td>
 					<td><bean:write name="listId" property="dept" /></td>
+					<td><bean:write name="listId" property="address" /></td>
+					<td><bean:write name="listId" property="email" /></td>
+					<td><bean:write name="listId" property="phone" /></td>
 					<td><button type="button" class="btn btn-primary">Update</button></td>
 					<td><button type="button" class="btn btn-success">Delete</button></td>
 				</tr>

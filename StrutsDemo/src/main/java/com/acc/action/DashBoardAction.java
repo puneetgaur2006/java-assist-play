@@ -11,7 +11,7 @@ import com.acc.dao.DbUtils;
 import com.acc.form.HelloWorldForm;
 
 
-public class HelloWorldAction extends Action {
+public class DashBoardAction extends Action {
 
 @Override
 public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
