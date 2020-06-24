@@ -7,7 +7,7 @@
 <struts-config>
 
     <form-beans>
-    	<!-- <form-bean name="helloWorldForm" type="com.acc.form.HelloWorldForm"/> -->
+    	<form-bean name="helloWorldForm" type="com.acc.form.HelloWorldForm"/>
     	<form-bean name="employeeForm" type="com.acc.form.EmployeeForm"/>
     	<form-bean name="userLoginForm" type="com.acc.form.UserLoginForm"/>
     </form-beans>
@@ -17,7 +17,7 @@
     </global-forwards>
 
     <action-mappings>
-        <action path="/dashboard" type="com.acc.action.DashBoardAction">
+        <action path="/dashboard" type="com.acc.action.DashBoardAction" name="helloWorldForm">
         	<forward name="success" path="/dashboard.jsp" />
         </action>
        
