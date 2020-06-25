@@ -7,9 +7,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionRedirect;
 
 import com.acc.dao.DbUtils;
 import com.acc.form.EmployeeForm;
+import com.acc.service.DashBoardService;
 
 public class AddEmployeeAction extends Action {
 
@@ -17,17 +19,24 @@ public class AddEmployeeAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		EmployeeForm addEmpForm = (EmployeeForm) form;
-
-		int savedIdOfEmployee=DbUtils.saveEmployee(addEmpForm) ;
-		System.out.println("savedIdOfEmployee "+savedIdOfEmployee);
-		if(savedIdOfEmployee==-1) {
-			
-			addEmpForm.setEmployeeId(savedIdOfEmployee);
-			request.setAttribute("savedId", savedIdOfEmployee);
-			return mapping.findForward("success");
+		DashBoardService dashBoardService =new DashBoardService();
 		
-		}
-		else return mapping.findForward("failure"); 
+		ActionRedirect redirect=new ActionRedirect(mapping.findForward("success"));
+		
+		int savedIdOfEmployee=dashBoardService.saveEmployee(addEmpForm) ;
+		System.out.println("savedIdOfEmployee "+savedIdOfEmployee);
+		
+			
+		request.setAttribute("list",dashBoardService.getAllEmployees());
+			
+		addEmpForm.setEmployeeId(savedIdOfEmployee);
+		
+		request.setAttribute("savedId", savedIdOfEmployee);
+		
+		return redirect;
+		
+		
+		 
 	}
 
 }

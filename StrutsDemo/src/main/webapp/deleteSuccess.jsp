@@ -43,25 +43,25 @@
 		
 		
 		window.onload = function() {
-			var deleteRec=<%= session.getAttribute("updateRecord")%>;
+			var deleteRec=<%= session.getAttribute("deleteRecord")%>;
 			if(deleteRec==true){
-				document.getElementById("updateSuccess").click();
+				document.getElementById("deleteSuccess").click();
 			}else{
-				document.getElementById("updatefail").click();
+				document.getElementById("deletefail").click();
 				window.location.href = "../StrutsDemo/dashboard.do"
 			}
 			};
 		
 	</script>
 
-<a href="StrutsDemo/dashboard.do"  data-toggle="modal" id="updatefail"></a>
-<a href="#showDeleteSuccessfull"  data-toggle="modal" id="updateSuccess"></a>
+<a href="StrutsDemo/dashboard.do"  data-toggle="modal" id="deletefail"></a>
+<a href="#showDeleteSuccessfull"  data-toggle="modal" id="deleteSuccess"></a>
 <div id="showDeleteSuccessfull" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<html:form action="/dashboard.do">
 				<div class="modal-body">					
-					<p>Record is updated successfully !</p>
+					<p>Record is deleted successfully !</p>
 				</div>
 				<div class="modal-footer">
 					<input type="submit" style="background:green"  value="Ok">

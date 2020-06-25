@@ -1,8 +1,8 @@
 package com.acc.form;
 
-import org.apache.struts.action.ActionForm;
+import org.apache.struts.validator.ValidatorForm;
 
-public class UserLoginForm extends ActionForm{
+public class UserLoginForm extends ValidatorForm{
 /**
 	 * 
 	 */

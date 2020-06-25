@@ -8,21 +8,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.acc.form.UserLoginForm;
-import com.acc.service.UserLoginService;
+import com.acc.service.DashBoardService;
 
-public class UserLoginAction extends Action{
+public class DeleteEmployeeAction extends Action{
 
-	
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-	    UserLoginForm userForm = (UserLoginForm) form;
-	    boolean checkUser=new UserLoginService().checkUserLoginDetails(userForm);
-	    if(checkUser) {
+	    String empId=(String)request.getParameter("empId");
+	   request.getSession().setAttribute("deleteRecord", new DashBoardService().deleteEmployee(empId));
 	    return mapping.findForward("success");
-	    }else {
-	    	request.setAttribute("msgId", "User Name and Password does not match");
-	    	return mapping.findForward("error");
-	    }
 	    }
 }

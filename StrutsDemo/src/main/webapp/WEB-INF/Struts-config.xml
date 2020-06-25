@@ -7,7 +7,6 @@
 <struts-config>
 
     <form-beans>
-    	<!-- <form-bean name="helloWorldForm" type="com.acc.form.HelloWorldForm"/> -->
     	<form-bean name="employeeForm" type="com.acc.form.EmployeeForm"/>
     	<form-bean name="userLoginForm" type="com.acc.form.UserLoginForm"/>
     </form-beans>
@@ -17,7 +16,7 @@
     </global-forwards>
 
     <action-mappings>
-        <action path="/dashboard" type="com.acc.action.DashBoardAction">
+        <action path="/dashboard" type="com.acc.action.DashBoardAction" name="employeeForm">
         	<forward name="success" path="/dashboard.jsp" />
         </action>
        
@@ -29,22 +28,29 @@
         	<forward name="success" path="/index.jsp" />
         </action>
         
-        <action path="/updateEmployee" forward="/updateEmployee.jsp"/>
         
-        <action path="/updateEmployee1" type="com.acc.action.UpdateEmployeeAction" name="employeeForm">
-        	<forward name="success" path="/saveUpdatedEmployee.jsp" />
+        
+        <action path="/updateEmployee" type="com.acc.action.UpdateEmployeeAction" validate="false" name="employeeForm">
+        	<forward name="success" path="/updateEmpSuccess.jsp" />
         </action>
         
-        <action path="/saveUpdatedEmployee" type="com.acc.action.SaveUpdatedEmployeeAction" name="employeeForm">
-        <forward name="success" path="/index.jsp" />
-        </action>
         
-          <action path="/userLogin" type="com.acc.action.UserLoginAction" name="userLoginForm">
+        
+          <action path="/userLogin" type="com.acc.action.UserLoginAction" input="/login.jsp" name="userLoginForm">
         <forward name="success" path="/index.jsp" />
         <forward name="error" path="/login.jsp" />
         </action>
         
+        <action path="/deleteAction" type="com.acc.action.DeleteEmployeeAction" name="employeeForm" validate="false" parameter="empId">
+        	<forward name="success" path="/deleteSuccess.jsp" />
+        	
+        </action>
     </action-mappings>
-
+<message-resources    parameter="ApplicationResources"/> 
+    
+    <plug-in className="org.apache.struts.validator.ValidatorPlugIn" >
+        <set-property property="pathnames" 
+        value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
+    </plug-in>
  	
 </struts-config>
