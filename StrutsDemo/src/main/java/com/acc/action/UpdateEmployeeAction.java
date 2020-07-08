@@ -17,7 +17,8 @@ public class UpdateEmployeeAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		EmployeeForm updateEmpForm = (EmployeeForm) form;
-		request.getSession().setAttribute("updateRecord", new DashBoardService().updateEmployee(updateEmpForm));
+		Object o = new DashBoardService().updateEmployee(updateEmpForm);
+		request.getSession().setAttribute("updateRecord", o);
 		return mapping.findForward("success");
 		 
 	}

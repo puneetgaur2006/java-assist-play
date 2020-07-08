@@ -32,11 +32,11 @@ public class RuntimeClassGen {
 
 			int numberOfActionFiles = new File("src/main/java/com/acc/action/").listFiles().length;
 			File[] files = new File("src/main/java/com/acc/action/").listFiles();
-			for (int i = 0; i < 1; i++) {
+			for (int i = 0; i < numberOfActionFiles; i++) {
 				String legacyCode = readClass(files[i].getName());
 
 				// Check if source class extends Action
-				boolean needsRefactoring = legacyCode.contains("extends Action");
+				boolean needsRefactoring = legacyCode.contains("extends Action") && !"RuntimeClassGen.java".equals(files[i].getName());
 
 				if (needsRefactoring) {
 					// Copy the contents between {}
@@ -45,10 +45,11 @@ public class RuntimeClassGen {
 					methodLines = methodLines.substring(0, methodLines.length() - 2);
 					// System.out.println("Method lines " + methodLines.substring(0,
 					// methodLines.length()-2));
+					System.out.println("Attempting to generating controller for " + files[i].getName());
 					Class clazz = generateClass(legacyCode, files[i].getName(), methodName, methodLines);
 					System.out.println("Class generated but will require manual fixes: " + clazz.getName());
 				} else {
-					System.out.println("No need to refactor...");
+					System.out.println("No need to refactor... " + files[i].getName());
 				}
 			}
 		} finally {
@@ -95,13 +96,12 @@ public class RuntimeClassGen {
 		// TODO: playaround
 		method.append("public String ").append(methodName).append(
 				"(com.acc.form.EmployeeForm form, org.springframework.ui.Model model, org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {");
-		System.out.println("Convert service calls");
 		String replaceReturnStatement = StringUtils.replace(methodLines, "mapping.findForward(\"success\")",
 				"\"view\"");
 		methodLines = replaceReturnStatement;
 		method.append(methodLines);
 		method.append("}");
-		System.out.println(method.toString());
+		//System.out.println(method.toString());
 		cc.addMethod(CtMethod.make(method.toString(), cc));
 		cc.writeFile();
 		return cc.toClass();
