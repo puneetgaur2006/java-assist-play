@@ -6,6 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+import org.springframework.util.StringUtils;
+
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -30,18 +32,19 @@ public class RuntimeClassGen {
 
 			int numberOfActionFiles = new File("src/main/java/com/acc/action/").listFiles().length;
 			File[] files = new File("src/main/java/com/acc/action/").listFiles();
-			for (int i = 0; i < numberOfActionFiles; i++) {
+			for (int i = 0; i < 1; i++) {
 				String legacyCode = readClass(files[i].getName());
 
 				// Check if source class extends Action
 				boolean needsRefactoring = legacyCode.contains("extends Action");
 
 				if (needsRefactoring) {
-					//Copy the contents between {}
-					int methodIndex = legacyCode.indexOf("{", legacyCode.indexOf("{") +1);
-					String methodLines = legacyCode.substring(methodIndex+1);
-					methodLines = methodLines.substring(0, methodLines.length()-2);
-					//System.out.println("Method lines " + methodLines.substring(0, methodLines.length()-2));
+					// Copy the contents between {}
+					int methodIndex = legacyCode.indexOf("{", legacyCode.indexOf("{") + 1);
+					String methodLines = legacyCode.substring(methodIndex + 1);
+					methodLines = methodLines.substring(0, methodLines.length() - 2);
+					// System.out.println("Method lines " + methodLines.substring(0,
+					// methodLines.length()-2));
 					Class clazz = generateClass(legacyCode, files[i].getName(), methodName, methodLines);
 					System.out.println("Class generated but will require manual fixes: " + clazz.getName());
 				} else {
@@ -73,6 +76,9 @@ public class RuntimeClassGen {
 	public static Class generateClass(String legacyCode, String className, String methodName, String methodLines)
 			throws CannotCompileException, Exception, IOException {
 		ClassPool pool = ClassPool.getDefault();
+		pool.importPackage("com.acc.form");
+		pool.importPackage("com.acc.service");
+		pool.importPackage("org.apache.struts.action");
 		int len = className.length();
 		className = className.substring(0, len - 5);
 		CtClass cc = pool.makeClass(className);
@@ -86,24 +92,19 @@ public class RuntimeClassGen {
 		attr.addAnnotation(annot);
 		cc.getClassFile().addAttribute(attr);
 
-		//TODO: playaround
-		method.append("public String ").append(methodName)
-		.append("(com.acc.form.EmployeeForm form, org.springframework.ui.Model model) {");
-		if(legacyCode.contains("new DashBoardService()")) {
-			//Anticipate their are DashBoardService calls. 
-			System.out.println("Convert service calls");
-			method.append("com.acc.service.DashBoardService board = new com.acc.service.DashBoardService();");
-			method.append("model.addAttribute(\"employeeList\", board.getAllEmployees());");
-			//method.append(methodLines);
-			method.append("return \"view\"").append(";").append("}");
-			
-		}
-		else {
-			method.append("return \"view\"").append(";").append("}");
-		}
-
+		// TODO: playaround
+		method.append("public String ").append(methodName).append(
+				"(com.acc.form.EmployeeForm form, org.springframework.ui.Model model, org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {");
+		System.out.println("Convert service calls");
+		String replaceReturnStatement = StringUtils.replace(methodLines, "mapping.findForward(\"success\")",
+				"\"view\"");
+		methodLines = replaceReturnStatement;
+		method.append(methodLines);
+		method.append("}");
+		System.out.println(method.toString());
 		cc.addMethod(CtMethod.make(method.toString(), cc));
 		cc.writeFile();
 		return cc.toClass();
 	}
+
 }

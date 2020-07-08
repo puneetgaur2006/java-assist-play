@@ -21,22 +21,17 @@ public class AddEmployeeAction extends Action {
 		EmployeeForm addEmpForm = (EmployeeForm) form;
 		DashBoardService dashBoardService =new DashBoardService();
 		
-		ActionRedirect redirect=new ActionRedirect(mapping.findForward("success"));
-		
 		int savedIdOfEmployee=dashBoardService.saveEmployee(addEmpForm) ;
 		System.out.println("savedIdOfEmployee "+savedIdOfEmployee);
 		
-			
 		request.setAttribute("list",dashBoardService.getAllEmployees());
-			
+		ActionRedirect redirect=new ActionRedirect(mapping.findForward("success"));
 		addEmpForm.setEmployeeId(savedIdOfEmployee);
+		Object o = savedIdOfEmployee;
+		request.setAttribute("savedId", o);
 		
-		request.setAttribute("savedId", savedIdOfEmployee);
-		
-		return redirect;
-		
-		
-		 
+		return mapping.findForward("success");
+
 	}
 
 }
