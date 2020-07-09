@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+import org.apache.struts.action.ActionForm;
 import org.springframework.util.StringUtils;
 
 import javassist.CannotCompileException;
@@ -45,7 +46,7 @@ public class RuntimeClassGen {
 					methodLines = methodLines.substring(0, methodLines.length() - 2);
 					// System.out.println("Method lines " + methodLines.substring(0,
 					// methodLines.length()-2));
-					System.out.println("Attempting to generating controller for " + files[i].getName());
+					System.out.println("Attempting to generate controller for " + files[i].getName());
 					Class clazz = generateClass(legacyCode, files[i].getName(), methodName, methodLines);
 					System.out.println("Class generated but will require manual fixes: " + clazz.getName());
 				} else {
@@ -95,7 +96,7 @@ public class RuntimeClassGen {
 
 		// TODO: playaround
 		method.append("public String ").append(methodName).append(
-				"(com.acc.form.EmployeeForm form, org.springframework.ui.Model model, org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {");
+				"(ActionForm form, org.springframework.ui.Model model, org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {");
 		String replaceReturnStatement = StringUtils.replace(methodLines, "mapping.findForward(\"success\")",
 				"\"view\"");
 		methodLines = replaceReturnStatement;
