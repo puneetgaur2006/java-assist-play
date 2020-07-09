@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-import org.apache.struts.action.ActionForm;
 import org.springframework.util.StringUtils;
 
 import javassist.CannotCompileException;
@@ -18,10 +17,9 @@ import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
 import javassist.bytecode.annotation.Annotation;
 
-public class RuntimeClassGen {
+public class StrutsActionConverter {
 
 	private static final String controllerAnnotation = "org.springframework.stereotype.Controller";
-	private static final String form = "com.acc.form";
 	private static final String methodName = "execute";
 
 	public static void main(String[] args) throws Exception, Exception {
@@ -37,7 +35,7 @@ public class RuntimeClassGen {
 				String legacyCode = readClass(files[i].getName());
 
 				// Check if source class extends Action
-				boolean needsRefactoring = legacyCode.contains("extends Action") && !"RuntimeClassGen.java".equals(files[i].getName());
+				boolean needsRefactoring = legacyCode.contains("extends Action") && !"StrutsActionConverter.java".equals(files[i].getName());
 
 				if (needsRefactoring) {
 					// Copy the contents between {}
@@ -81,6 +79,8 @@ public class RuntimeClassGen {
 		pool.importPackage("com.acc.form");
 		pool.importPackage("com.acc.service");
 		pool.importPackage("org.apache.struts.action");
+		pool.importPackage("org.springframework.ui");
+		pool.importPackage("javax.servlet.http");
 		int len = className.length();
 		className = className.substring(0, len - 5);
 		CtClass cc = pool.makeClass(className);
@@ -96,7 +96,7 @@ public class RuntimeClassGen {
 
 		// TODO: playaround
 		method.append("public String ").append(methodName).append(
-				"(ActionForm form, org.springframework.ui.Model model, org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {");
+				"(ActionForm form, Model model, ActionMapping mapping, HttpServletRequest request) {");
 		String replaceReturnStatement = StringUtils.replace(methodLines, "mapping.findForward(\"success\")",
 				"\"view\"");
 		methodLines = replaceReturnStatement;
