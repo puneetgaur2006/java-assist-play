@@ -28,18 +28,14 @@ public class StrutsActionConverter {
 	private static final String modelPackage = "org.springframework.ui";
 
 	public static void main(String[] args) throws Exception, Exception {
+		BufferedReader br = null;
 		try {
-
-			// Read a class
-
 			int numberOfActionFiles = new File("src/main/java/com/acc/action/").listFiles().length;
 			File[] files = new File("src/main/java/com/acc/action/").listFiles();
-
 			// Reading class as a file
 			List<String> imports = new ArrayList<String>();
 			for (int iCount = 0; iCount < numberOfActionFiles; iCount++) {
-				@SuppressWarnings("resource")
-				BufferedReader br = new BufferedReader(new FileReader(files[iCount]));
+				br = new BufferedReader(new FileReader(files[iCount]));
 				String st;
 
 				while ((st = br.readLine()) != null) {
@@ -49,7 +45,6 @@ public class StrutsActionConverter {
 					}
 				}
 			}
-
 			// Reading and storing class as string
 			for (int i = 0; i < numberOfActionFiles; i++) {
 				String legacyCode = readClass(files[i].getName());
@@ -66,12 +61,13 @@ public class StrutsActionConverter {
 					System.out.println("Attempting to generate controller for " + files[i].getName());
 					Class<?> clazz = generateClass(legacyCode, files[i].getName(), methodName, methodLines, imports);
 					System.out.println("Class generated but will require manual fixes: " + clazz.getName());
+					System.out.println("------------------------------------");
 				} else {
 					System.out.println("No need to refactor... " + files[i].getName());
 				}
 			}
 		} finally {
-
+			br.close();
 		}
 	}
 
@@ -80,9 +76,7 @@ public class StrutsActionConverter {
 		StringBuilder sb = new StringBuilder();
 		try {
 			Path path = Paths.get("src/main/java/com/acc/action/" + className);
-
 			scanner = new Scanner(path);
-
 			while (scanner.hasNextLine()) {
 				sb.append(scanner.nextLine());
 			}
@@ -98,7 +92,6 @@ public class StrutsActionConverter {
 		String s = null;
 		// Read package import statements and configure the pool
 		for (String packageName : imports) {
-			// System.out.println(packageName);
 			String processedPackage = packageName.substring(7, packageName.indexOf(";"));
 			char[] ch = processedPackage.toCharArray();
 			char cj[] = new char[25000];
@@ -108,13 +101,11 @@ public class StrutsActionConverter {
 				}
 				cj[i] = ch[i];
 				s = new String(cj);
-				// System.out.println(s);
 			}
 			s = s.trim();
 			String finalPackage = s.substring(0, s.length() - 1);
-			// System.out.println(finalPackage);
 			pool.importPackage(finalPackage);
-			pool.importPackage(modelPackage);// This is required to access Model object
+			pool.importPackage(modelPackage);// This is required to access Model object. Adding as default
 		}
 		int len = className.length();
 		className = className.substring(0, len - 5);
@@ -129,7 +120,6 @@ public class StrutsActionConverter {
 		attr.addAnnotation(annot);
 		cc.getClassFile().addAttribute(attr);
 
-		// TODO: playaround
 		method.append("public String ").append(methodName)
 				.append("(ActionForm form, Model model, ActionMapping mapping, HttpServletRequest request) {");
 		String replaceReturnStatement = StringUtils.replace(methodLines, "mapping.findForward(\"success\")",
@@ -137,7 +127,6 @@ public class StrutsActionConverter {
 		methodLines = replaceReturnStatement;
 		method.append(methodLines);
 		method.append("}");
-		// System.out.println(method.toString());
 		cc.addMethod(CtMethod.make(method.toString(), cc));
 		cc.writeFile();
 		return cc.toClass();
