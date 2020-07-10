@@ -94,7 +94,7 @@ public class StrutsActionConverter {
 		for (String packageName : imports) {
 			String processedPackage = packageName.substring(7, packageName.indexOf(";"));
 			char[] ch = processedPackage.toCharArray();
-			char cj[] = new char[25000];
+			char cj[] = new char[25000];//TODO: Make this dynamic
 			for (int i = 0; i < ch.length; i++) {
 				if (Character.isUpperCase(ch[i])) {
 					break;
@@ -109,6 +109,7 @@ public class StrutsActionConverter {
 		}
 		int len = className.length();
 		className = className.substring(0, len - 5);
+		className = StringUtils.replace(className, "Action", "Controller");
 		CtClass cc = pool.makeClass(className);
 		ClassFile cfile = cc.getClassFile();
 		ConstPool cpool = cfile.getConstPool();
